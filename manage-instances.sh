@@ -34,6 +34,200 @@ print_warning() {
     echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
+print_step() {
+    echo -e "${CYAN}[STEP]${NC} $1"
+}
+
+validate_instance() {
+    local instance_name="$1"
+    local instance_dir="$INSTANCES_DIR/$instance_name"
+
+    if [ ! -d "$instance_dir" ]; then
+        print_error "Instance directory '$instance_name' not found"
+        return 1
+    fi
+
+    if [ ! -f "$instance_dir/docker-compose.yml" ]; then
+        print_error "docker-compose.yml not found in instance '$instance_name'"
+        return 1
+    fi
+
+    if [ ! -f "$instance_dir/.env" ]; then
+        print_error ".env file not found in instance '$instance_name'"
+        return 1
+    fi
+
+    # Validate docker-compose.yml syntax
+    if ! docker-compose -f "$instance_dir/docker-compose.yml" config > /dev/null 2>&1; then
+        print_error "Invalid docker-compose.yml in instance '$instance_name'"
+        return 1
+    fi
+
+    return 0
+}
+
+update_instance() {
+    local instance_name="$1"
+    local instance_dir="$INSTANCES_DIR/$instance_name"
+
+    print_status "Updating instance '$instance_name'..."
+
+    # Validate instance before updating
+    if ! validate_instance "$instance_name"; then
+        print_error "Validation failed for instance '$instance_name', skipping update"
+        return 1
+    fi
+
+    # Check if Docker is running
+    if ! docker info > /dev/null 2>&1; then
+        print_error "Docker is not running or not accessible"
+        return 1
+    fi
+
+    local update_failed=0
+    local start_time=$(date +%s)
+
+    # Step 1: Stop containers
+    print_step "Stopping containers for '$instance_name'..."
+    if ! docker-compose -f "$instance_dir/docker-compose.yml" down; then
+        print_error "Failed to stop containers for '$instance_name'"
+        update_failed=1
+    else
+        print_success "Containers stopped for '$instance_name'"
+    fi
+
+    # Step 2: Build images (only if stop was successful)
+    if [ $update_failed -eq 0 ]; then
+        print_step "Building images for '$instance_name'..."
+        if ! docker-compose -f "$instance_dir/docker-compose.yml" build --no-cache; then
+            print_error "Failed to build images for '$instance_name'"
+            update_failed=1
+        else
+            print_success "Images built for '$instance_name'"
+        fi
+    fi
+
+    # Step 3: Start containers (attempt even if build failed, in case old images work)
+    print_step "Starting containers for '$instance_name'..."
+    if ! docker-compose -f "$instance_dir/docker-compose.yml" up -d; then
+        print_error "Failed to start containers for '$instance_name'"
+        update_failed=1
+    else
+        print_success "Containers started for '$instance_name'"
+    fi
+
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+
+    if [ $update_failed -eq 0 ]; then
+        print_success "Instance '$instance_name' updated successfully in ${duration}s"
+        return 0
+    else
+        print_error "Instance '$instance_name' update completed with errors in ${duration}s"
+        return 1
+    fi
+}
+
+confirm_update_all() {
+    echo -e "${YELLOW}⚠️  WARNING: This will update ALL instances!${NC}"
+    echo "This process will:"
+    echo "  1. Stop all running containers"
+    echo "  2. Rebuild all Docker images"
+    echo "  3. Start all containers"
+    echo
+    echo "This may cause temporary downtime for all instances."
+    echo
+    read -p "Are you sure you want to continue? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        print_status "Update cancelled by user"
+        return 1
+    fi
+    return 0
+}
+
+update_all_instances() {
+    local bulk_start_time=$(date +%s)
+    print_status "Starting bulk update for all instances..."
+
+    if [ ! -d "$INSTANCES_DIR" ] || [ -z "$(ls -A "$INSTANCES_DIR" 2>/dev/null)" ]; then
+        print_warning "No instances found to update"
+        echo
+        echo "Deploy your first instance with: ./multi-instance-deploy.sh"
+        return 0
+    fi
+
+    # Check if Docker is running
+    if ! docker info > /dev/null 2>&1; then
+        print_error "Docker is not running or not accessible"
+        return 1
+    fi
+
+    local total_instances=0
+    local successful_updates=0
+    local failed_updates=0
+    local failed_instances=()
+
+    # Count total instances
+    for instance_dir in "$INSTANCES_DIR"/*; do
+        if [ -d "$instance_dir" ]; then
+            total_instances=$((total_instances + 1))
+        fi
+    done
+
+    print_status "Found $total_instances instance(s) to update"
+    echo
+
+    # Update each instance
+    local current_instance=0
+    for instance_dir in "$INSTANCES_DIR"/*; do
+        if [ -d "$instance_dir" ]; then
+            current_instance=$((current_instance + 1))
+            local instance_name=$(basename "$instance_dir")
+
+            echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo -e "${PURPLE}Updating Instance [$current_instance/$total_instances]: $instance_name${NC}"
+            echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+            if update_instance "$instance_name"; then
+                successful_updates=$((successful_updates + 1))
+            else
+                failed_updates=$((failed_updates + 1))
+                failed_instances+=("$instance_name")
+            fi
+
+            echo
+        fi
+    done
+
+    # Summary
+    local bulk_end_time=$(date +%s)
+    local bulk_duration=$((bulk_end_time - bulk_start_time))
+
+    echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${PURPLE}Bulk Update Summary${NC}"
+    echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "Total instances: $total_instances"
+    echo -e "${GREEN}Successful updates: $successful_updates${NC}"
+    echo -e "${RED}Failed updates: $failed_updates${NC}"
+    echo -e "Total time: ${bulk_duration}s"
+
+    if [ $failed_updates -gt 0 ]; then
+        echo
+        echo -e "${RED}Failed instances:${NC}"
+        for failed_instance in "${failed_instances[@]}"; do
+            echo -e "  - $failed_instance"
+        done
+        echo
+        echo -e "${YELLOW}Recommendation: Check the logs for failed instances and retry individual updates${NC}"
+        return 1
+    else
+        echo
+        print_success "All instances updated successfully!"
+        return 0
+    fi
+}
+
 list_instances() {
     if [ ! -d "$INSTANCES_DIR" ] || [ -z "$(ls -A "$INSTANCES_DIR" 2>/dev/null)" ]; then
         print_status "No instances found."
@@ -119,9 +313,12 @@ manage_instance() {
         "backup")
             backup_instance "$instance_name"
             ;;
+        "update")
+            update_instance "$instance_name"
+            ;;
         *)
             print_error "Unknown action: $action"
-            echo "Available actions: start, stop, restart, logs, status, info, backup"
+            echo "Available actions: start, stop, restart, logs, status, info, backup, update"
             return 1
             ;;
     esac
@@ -214,8 +411,11 @@ Commands:
   status <instance>             Show status of an instance
   info <instance>               Show detailed information about an instance
   backup <instance>             Create backup of an instance
+  update <instance>             Update a specific instance (down → build → up)
   start-all                     Start all instances
   stop-all                      Stop all instances
+  update-all                    Update all instances (down → build → up for each)
+  update-all --force            Update all instances without confirmation
   help                          Show this help message
 
 Examples:
@@ -224,6 +424,14 @@ Examples:
   $0 logs my-company
   $0 info my-company
   $0 backup my-company
+  $0 update my-company
+  $0 update-all
+
+Update Process:
+  The update command performs these steps for each instance:
+  1. Stop containers (docker-compose down)
+  2. Build images (docker-compose build --no-cache)
+  3. Start containers (docker-compose up -d)
 
 EOF
 }
@@ -259,6 +467,26 @@ case "${1:-help}" in
     "backup")
         print_header
         manage_instance "$2" "backup"
+        ;;
+    "update")
+        print_header
+        if [ -z "$2" ]; then
+            print_error "Instance name required for update command"
+            echo
+            echo "Usage: $0 update <instance-name>"
+            echo "   or: $0 update-all"
+            exit 1
+        fi
+        manage_instance "$2" "update"
+        ;;
+    "update-all")
+        print_header
+        if [ "$2" = "--force" ]; then
+            print_status "Force flag detected, skipping confirmation"
+            update_all_instances
+        elif confirm_update_all; then
+            update_all_instances
+        fi
         ;;
     "start-all")
         print_header

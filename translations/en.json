@@ -337,7 +337,7 @@
     },
     {
         "key": "maintenance.page.app_name",
-        "value": "PowerChat Plus"
+        "value": "{{appName}}"
     },
     {
         "key": "maintenance.page.support_message",
@@ -669,11 +669,11 @@
     },
     {
         "key": "message_bubble.confirm_delete_whatsapp_message",
-        "value": "This message will be deleted from both PowerChat and the recipient's WhatsApp chat. This action cannot be undone."
+        "value": "This message will be deleted from both {{appName}} and the recipient's WhatsApp chat. This action cannot be undone."
     },
     {
         "key": "message_bubble.confirm_delete_whatsapp_old",
-        "value": "This message is too old to be deleted from WhatsApp (72-minute limit). It will only be deleted from PowerChat."
+        "value": "This message is too old to be deleted from WhatsApp (72-minute limit). It will only be deleted from {{appName}}."
     },
     {
         "key": "welcome.message",
@@ -1597,7 +1597,7 @@
     },
     {
         "key": "auth.welcome_title",
-        "value": "Welcome to PowerChat"
+        "value": "Welcome to {{appName}}"
     },
     {
         "key": "auth.welcome_subtitle",
@@ -4093,7 +4093,7 @@
     },
     {
         "key": "admin.backup.google_drive.connection_description",
-        "value": "Authorize PowerChat to access your Google Drive for backup storage."
+        "value": "Authorize {{appName}} to access your Google Drive for backup storage."
     },
     {
         "key": "admin.backup.google_drive.connect_drive",
@@ -6721,7 +6721,31 @@
     },
     {
         "key": "message_bubble.powerchat_assistant",
-        "value": "PowerChat Assistant"
+        "value": "{{appName}} Assistant"
+    },
+    {
+        "key": "clear_history.confirm_message",
+        "value": "Are you sure you want to clear all chat history with \"{{conversationName}}\"? This will permanently delete all messages and media files from {{appName}}."
+    },
+    {
+        "key": "clear_history.confirm_group_message",
+        "value": "Are you sure you want to clear all chat history for \"{{conversationName}}\"? This will permanently delete all messages and media files from {{appName}}."
+    },
+    {
+        "key": "clear_history.warning_title",
+        "value": "Important:"
+    },
+    {
+        "key": "clear_history.warning_irreversible",
+        "value": "This action cannot be undone"
+    },
+    {
+        "key": "clear_history.warning_local_only",
+        "value": "Messages will only be deleted from {{appName}}, not from WhatsApp"
+    },
+    {
+        "key": "clear_history.warning_media",
+        "value": "All associated media files will be permanently deleted"
     },
     {
         "key": "new_conversation.name_required",
@@ -7582,5 +7606,609 @@
     {
         "key": "common.unknown",
         "value": "Unknown"
+    },
+    {
+        "key": "admin.settings.platform",
+        "value": "Platform"
+    },
+    {
+        "key": "admin.settings.partnerapi",
+        "value": "Partner API"
+    },
+    {
+        "key": "admin.settings.title",
+        "value": "Settings"
+    },
+    {
+        "key": "admin.settings.branding",
+        "value": "Branding"
+    },
+    {
+        "key": "admin.settings.branding_description",
+        "value": "Customize the appearance of your application"
+    },
+    {
+        "key": "admin.settings.payment_gateways",
+        "value": "Payment Gateways"
+    },
+    {
+        "key": "admin.settings.email",
+        "value": "Email Settings"
+    },
+    {
+        "key": "admin.settings.general",
+        "value": "General"
+    },
+    {
+        "key": "admin.settings.registration",
+        "value": "Registration"
+    },
+    {
+        "key": "admin.settings.backup",
+        "value": "Database Backup"
+    },
+    {
+        "key": "admin.settings.app_name",
+        "value": "Application Name"
+    },
+    {
+        "key": "admin.settings.primary_color",
+        "value": "Primary Color"
+    },
+    {
+        "key": "admin.settings.secondary_color",
+        "value": "Secondary Color"
+    },
+    {
+        "key": "admin.settings.save_branding",
+        "value": "Save Branding Settings"
+    },
+    {
+        "key": "admin.settings.platform.title",
+        "value": "Platform Configuration"
+    },
+    {
+        "key": "admin.settings.platform.description",
+        "value": "Configure platform-wide partner API integrations and Tech Provider credentials"
+    },
+    {
+        "key": "admin.settings.platform.360dialog.title",
+        "value": "360Dialog Partner API"
+    },
+    {
+        "key": "admin.settings.platform.360dialog.description",
+        "value": "Configure 360Dialog Partner credentials for company onboarding"
+    },
+    {
+        "key": "admin.settings.platform.meta.title",
+        "value": "Meta WhatsApp Business API"
+    },
+    {
+        "key": "admin.settings.platform.meta.description",
+        "value": "Configure Meta Tech Provider credentials for embedded signup"
+    },
+    {
+        "key": "admin.settings.platform.meta.benefits.embedded_signup",
+        "value": "Tech Provider embedded signup integration"
+    },
+    {
+        "key": "admin.settings.platform.meta.benefits.streamlined_onboarding",
+        "value": "Streamlined WhatsApp Business account onboarding"
+    },
+    {
+        "key": "admin.settings.platform.meta.benefits.automatic_provisioning",
+        "value": "Automatic phone number provisioning"
+    },
+    {
+        "key": "admin.settings.platform.configure_button",
+        "value": "Configure"
+    },
+    {
+        "key": "admin.settings.platform.coming_soon",
+        "value": "Coming Soon"
+    },
+    {
+        "key": "admin.settings.platform.additional_partners.title",
+        "value": "Additional Partner APIs"
+    },
+    {
+        "key": "admin.settings.platform.additional_partners.description",
+        "value": "Future partner integrations will appear here"
+    },
+    {
+        "key": "meta.partner.config.title",
+        "value": "Meta WhatsApp Business API Partner Configuration"
+    },
+    {
+        "key": "meta.partner.config.loading",
+        "value": "Loading configuration..."
+    },
+    {
+        "key": "meta.partner.config.tech_provider_credentials",
+        "value": "Tech Provider Credentials"
+    },
+    {
+        "key": "meta.partner.config.tech_provider_description",
+        "value": "Configure your Meta Tech Provider credentials for embedded signup"
+    },
+    {
+        "key": "meta.partner.config.app_id",
+        "value": "App ID"
+    },
+    {
+        "key": "meta.partner.config.app_id_placeholder",
+        "value": "Your Meta App ID"
+    },
+    {
+        "key": "meta.partner.config.app_secret",
+        "value": "App Secret"
+    },
+    {
+        "key": "meta.partner.config.app_secret_placeholder",
+        "value": "Your Meta App Secret"
+    },
+    {
+        "key": "meta.partner.config.business_manager_id",
+        "value": "Business Manager ID"
+    },
+    {
+        "key": "meta.partner.config.business_manager_id_placeholder",
+        "value": "Your Business Manager ID"
+    },
+    {
+        "key": "meta.partner.config.webhook_verify_token",
+        "value": "Webhook Verify Token"
+    },
+    {
+        "key": "meta.partner.config.webhook_verify_token_placeholder",
+        "value": "Webhook verification token"
+    },
+    {
+        "key": "meta.partner.config.access_token",
+        "value": "System User Access Token"
+    },
+    {
+        "key": "meta.partner.config.access_token_placeholder",
+        "value": "System user access token"
+    },
+    {
+        "key": "meta.partner.config.webhook_url",
+        "value": "Webhook URL"
+    },
+    {
+        "key": "meta.partner.config.webhook_url_placeholder",
+        "value": "https://yourdomain.com/api/webhooks/meta-whatsapp"
+    },
+    {
+        "key": "meta.partner.config.company_profile",
+        "value": "Company Profile"
+    },
+    {
+        "key": "meta.partner.config.company_profile_description",
+        "value": "This information will be shown to companies during onboarding"
+    },
+    {
+        "key": "meta.partner.config.company_name",
+        "value": "Company Name"
+    },
+    {
+        "key": "meta.partner.config.company_name_placeholder",
+        "value": "Your company name"
+    },
+    {
+        "key": "meta.partner.config.logo_url",
+        "value": "Logo URL"
+    },
+    {
+        "key": "meta.partner.config.logo_url_placeholder",
+        "value": "https://example.com/logo.png"
+    },
+    {
+        "key": "meta.partner.config.test_configuration",
+        "value": "Test Configuration"
+    },
+    {
+        "key": "meta.partner.config.save_configuration",
+        "value": "Save Configuration"
+    },
+    {
+        "key": "meta.partner.config.update_configuration",
+        "value": "Update Configuration"
+    },
+    {
+        "key": "meta.partner.config.validation.required_fields",
+        "value": "App ID, App Secret, and Business Manager ID are required"
+    },
+    {
+        "key": "meta.partner.config.validation.success",
+        "value": "Meta Partner API credentials are valid!"
+    },
+    {
+        "key": "meta.partner.config.validation.failed",
+        "value": "Invalid Meta Partner API credentials"
+    },
+    {
+        "key": "meta.partner.config.validation.error",
+        "value": "Failed to validate configuration"
+    },
+    {
+        "key": "meta.partner.config.save.success",
+        "value": "Meta Partner API configuration updated successfully"
+    },
+    {
+        "key": "meta.partner.config.save.error",
+        "value": "Failed to save configuration"
+    },
+    {
+        "key": "meta.partner.config.load.error",
+        "value": "Failed to load existing configuration"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.title",
+        "value": "Meta WhatsApp Business API - Easy Setup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.description",
+        "value": "Connect your WhatsApp Business account in just a few clicks using our integrated onboarding flow."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.connection_name",
+        "value": "Connection Name"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.connection_name_placeholder",
+        "value": "e.g., Main WhatsApp Business"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.connection_name_help",
+        "value": "Give this connection a memorable name"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.what_happens_next",
+        "value": "What happens next:"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.step_connect_business",
+        "value": "Connect your Meta Business account"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.step_select_account",
+        "value": "Select your WhatsApp Business account"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.step_choose_numbers",
+        "value": "Choose phone numbers to integrate"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.step_automatic_config",
+        "value": "Automatic configuration and setup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.sdk_initializing",
+        "value": "Initializing Facebook SDK..."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.start_easy_setup",
+        "value": "Start Easy Setup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.processing",
+        "value": "Processing..."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.cancel",
+        "value": "Cancel"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.checking_config",
+        "value": "Checking configuration..."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.config_required.title",
+        "value": "Configuration Required"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.config_required.description",
+        "value": "Meta WhatsApp Business API Partner integration is not configured. Please contact your system administrator to set up the Partner API credentials."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.config_required.close",
+        "value": "Close"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.success",
+        "value": "WhatsApp Business account connected successfully. {{count}} phone number(s) configured."
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.connection_name_required",
+        "value": "Please enter a connection name"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.sdk_not_initialized",
+        "value": "Facebook SDK not initialized"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.launch_signup",
+        "value": "Failed to launch WhatsApp signup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.signup_failed",
+        "value": "Failed to process WhatsApp Business account signup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.process_signup",
+        "value": "Failed to process signup"
+    },
+    {
+        "key": "meta.whatsapp.onboarding.error.sdk_init",
+        "value": "Failed to initialize Facebook SDK"
+    },
+    {
+        "key": "channels.whatsapp.meta.easy_setup",
+        "value": "Easy Setup"
+    },
+    {
+        "key": "channels.whatsapp.meta.title",
+        "value": "WhatsApp Business API (Meta)"
+    },
+    {
+        "key": "channels.whatsapp.meta.description",
+        "value": "Official Meta WhatsApp Business API"
+    },
+    {
+        "key": "channels.whatsapp.meta.embedded.title",
+        "value": "WhatsApp Business Embedded"
+    },
+    {
+        "key": "channels.whatsapp.meta.embedded.description",
+        "value": "Quick setup with embedded signup"
+    },
+    {
+        "key": "channels.whatsapp.meta.connection_info",
+        "value": "Official WhatsApp Business API (Meta)"
+    },
+    {
+        "key": "channels.whatsapp.meta.connection_description",
+        "value": "This connection uses the official WhatsApp Business API from Meta. It provides reliable messaging with advanced features and compliance."
+    },
+    {
+        "key": "common.success",
+        "value": "Success"
+    },
+    {
+        "key": "common.error",
+        "value": "Error"
+    },
+    {
+        "key": "common.validation_failed",
+        "value": "Validation Failed"
+    },
+    {
+        "key": "common.signup_error",
+        "value": "Signup Error"
+    },
+    {
+        "key": "common.sdk_error",
+        "value": "SDK Error"
+    },
+    {
+        "key": "common.configuration_error",
+        "value": "Configuration Error"
+    },
+    {
+        "key": "partner.config.success.created",
+        "value": "Partner API configuration created successfully"
+    },
+    {
+        "key": "partner.config.success.updated",
+        "value": "Partner API configuration updated successfully"
+    },
+    {
+        "key": "partner.config.error.load_failed",
+        "value": "Failed to load existing configuration"
+    },
+    {
+        "key": "partner.config.error.save_failed",
+        "value": "Failed to save configuration"
+    },
+    {
+        "key": "partner.config.error.validation_failed",
+        "value": "Failed to validate configuration"
+    },
+    {
+        "key": "api.access.title",
+        "value": "API Access"
+    },
+    {
+        "key": "api.access.description",
+        "value": "Manage API keys and programmatic access to your channels"
+    },
+    {
+        "key": "api.access.create_key",
+        "value": "Create API Key"
+    },
+    {
+        "key": "api.access.no_keys.title",
+        "value": "No API Keys"
+    },
+    {
+        "key": "api.access.no_keys.description",
+        "value": "Create your first API key to start sending messages programmatically"
+    },
+    {
+        "key": "api.access.tabs.keys",
+        "value": "API Keys"
+    },
+    {
+        "key": "api.access.tabs.usage",
+        "value": "Usage Statistics"
+    },
+    {
+        "key": "api.access.tabs.docs",
+        "value": "Documentation"
+    },
+    {
+        "key": "api.access.key.active",
+        "value": "Active"
+    },
+    {
+        "key": "api.access.key.inactive",
+        "value": "Inactive"
+    },
+    {
+        "key": "api.access.key.activate",
+        "value": "Activate"
+    },
+    {
+        "key": "api.access.key.deactivate",
+        "value": "Deactivate"
+    },
+    {
+        "key": "api.access.key.delete",
+        "value": "Delete"
+    },
+    {
+        "key": "api.access.key.created",
+        "value": "Created"
+    },
+    {
+        "key": "api.access.key.last_used",
+        "value": "Last Used"
+    },
+    {
+        "key": "api.access.key.never_used",
+        "value": "Never"
+    },
+    {
+        "key": "api.access.key.rate_limits",
+        "value": "Rate Limits"
+    },
+    {
+        "key": "api.access.key.permissions",
+        "value": "Permissions"
+    },
+    {
+        "key": "api.access.create.title",
+        "value": "Create New API Key"
+    },
+    {
+        "key": "api.access.create.description",
+        "value": "Create a new API key to access the messaging API programmatically."
+    },
+    {
+        "key": "api.access.create.name_label",
+        "value": "API Key Name"
+    },
+    {
+        "key": "api.access.create.name_placeholder",
+        "value": "e.g., Production Bot, Marketing Automation"
+    },
+    {
+        "key": "api.access.create.creating",
+        "value": "Creating..."
+    },
+    {
+        "key": "api.access.create.cancel",
+        "value": "Cancel"
+    },
+    {
+        "key": "api.access.show_key.title",
+        "value": "API Key Created"
+    },
+    {
+        "key": "api.access.show_key.description",
+        "value": "Your API key has been created. Copy it now as it won't be shown again."
+    },
+    {
+        "key": "api.access.show_key.warning",
+        "value": "Store this API key securely. You won't be able to see it again."
+    },
+    {
+        "key": "api.access.show_key.saved",
+        "value": "I've Saved the Key"
+    },
+    {
+        "key": "api.access.usage.total_requests",
+        "value": "Total Requests"
+    },
+    {
+        "key": "api.access.usage.successful",
+        "value": "Successful"
+    },
+    {
+        "key": "api.access.usage.failed",
+        "value": "Failed"
+    },
+    {
+        "key": "api.access.usage.avg_duration",
+        "value": "Avg Duration"
+    },
+    {
+        "key": "api.access.usage.data_transfer",
+        "value": "Data Transfer"
+    },
+    {
+        "key": "api.access.docs.title",
+        "value": "API Documentation"
+    },
+    {
+        "key": "api.access.docs.description",
+        "value": "Learn how to integrate with our messaging API"
+    },
+    {
+        "key": "api.access.docs.base_url",
+        "value": "Base URL"
+    },
+    {
+        "key": "api.access.docs.endpoints",
+        "value": "Available Endpoints"
+    },
+    {
+        "key": "api.access.docs.authentication",
+        "value": "Authentication"
+    },
+    {
+        "key": "api.access.docs.auth_description",
+        "value": "Include your API key in the Authorization header:"
+    },
+    {
+        "key": "api.access.error.name_required",
+        "value": "Please enter a name for the API key"
+    },
+    {
+        "key": "api.access.error.create_failed",
+        "value": "Failed to create API key"
+    },
+    {
+        "key": "api.access.error.delete_failed",
+        "value": "Failed to delete API key"
+    },
+    {
+        "key": "api.access.error.update_failed",
+        "value": "Failed to update API key"
+    },
+    {
+        "key": "api.access.error.load_failed",
+        "value": "Failed to load API keys"
+    },
+    {
+        "key": "api.access.success.created",
+        "value": "API key created successfully"
+    },
+    {
+        "key": "api.access.success.deleted",
+        "value": "API key deleted successfully"
+    },
+    {
+        "key": "api.access.success.activated",
+        "value": "API key activated successfully"
+    },
+    {
+        "key": "api.access.success.deactivated",
+        "value": "API key deactivated successfully"
+    },
+    {
+        "key": "api.access.success.copied",
+        "value": "API key copied to clipboard"
     }
 ]

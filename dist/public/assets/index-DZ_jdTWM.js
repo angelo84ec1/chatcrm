@@ -1,1 +1,0 @@
-import{u as s,e as a,r as e,j as n,p as r}from"./index-Du4k3PvU.js";function i(){const{user:i,isLoading:u}=s(),[d,o]=a();return e.useEffect((()=>{u||(i&&i.isSuperAdmin?o("/admin/dashboard"):i&&o("/"))}),[i,u,o]),u||!i?n.jsx(r,{}):null}export{i as default};

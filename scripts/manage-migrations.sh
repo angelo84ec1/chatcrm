@@ -1,18 +1,24 @@
 #!/bin/bash
 
+# PowerChatPlus Migration Management Script
+# This script manages database migrations for instances with execution tracking
+# Usage: ./scripts/manage-migrations.sh <instance_name> <command>
 
 set -e
 
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Script directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 INSTANCES_DIR="$PROJECT_ROOT/instances"
 
+# Function to print colored output
 print_status() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -29,6 +35,7 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Function to show usage
 show_usage() {
     cat << EOF
 Usage: $0 <instance_name> <command>
@@ -52,11 +59,13 @@ Examples:
 EOF
 }
 
+# Function to get migration status file
 get_migration_status_file() {
     local instance_name=$1
     echo "$INSTANCES_DIR/$instance_name/.migration_status"
 }
 
+# Function to check if migration has been applied
 is_migration_applied() {
     local instance_name=$1
     local migration_file=$2
@@ -70,6 +79,7 @@ is_migration_applied() {
     [ "$status" = "applied" ]
 }
 
+# Function to update migration status
 update_migration_status() {
     local instance_name=$1
     local migration_file=$2
@@ -83,15 +93,19 @@ update_migration_status() {
 
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
+    # Update or add the migration status
     if grep -q "^${migration_file}:" "$status_file"; then
+        # Update existing entry
         sed -i "s/^${migration_file}:.*/${migration_file}:${new_status}:${timestamp}/" "$status_file"
     else
+        # Add new entry
         echo "${migration_file}:${new_status}:${timestamp}" >> "$status_file"
     fi
 
     print_status "Updated migration status: $migration_file -> $new_status"
 }
 
+# Function to execute migration in container
 execute_migration() {
     local instance_name=$1
     local migration_file=$2
@@ -99,21 +113,25 @@ execute_migration() {
 
     print_status "Executing migration: $migration_file"
 
+    # Check if container is running
     if ! docker ps --format "{{.Names}}" | grep -q "^${container_name}$"; then
         print_error "Database container '$container_name' is not running"
         return 1
     fi
 
+    # Get database connection details
     local instance_dir="$INSTANCES_DIR/$instance_name"
     if [ ! -f "$instance_dir/.env" ]; then
         print_error "Instance .env file not found: $instance_dir/.env"
         return 1
     fi
 
+    # Load environment variables
     set -a
     source "$instance_dir/.env"
     set +a
 
+    # Execute migration
     local migration_path="/app/migrations/$migration_file"
 
     if docker exec "$container_name" psql -h postgres -p 5432 -U "${DB_USER:-postgres}" -d "${DB_NAME}" -f "$migration_path"; then
@@ -127,6 +145,7 @@ execute_migration() {
     fi
 }
 
+# Command: Show migration status
 cmd_status() {
     local instance_name=$1
     local status_file=$(get_migration_status_file "$instance_name")
@@ -143,6 +162,7 @@ cmd_status() {
     printf "%-30s %-10s %-20s\n" "---------" "------" "---------"
 
     while IFS=':' read -r migration status timestamp; do
+        # Skip comments and empty lines
         if [[ "$migration" =~ ^#.*$ ]] || [ -z "$migration" ]; then
             continue
         fi
@@ -166,6 +186,7 @@ cmd_status() {
     echo
 }
 
+# Command: Apply pending migrations
 cmd_apply() {
     local instance_name=$1
     local status_file=$(get_migration_status_file "$instance_name")
@@ -181,6 +202,7 @@ cmd_apply() {
     local failed_count=0
 
     while IFS=':' read -r migration status timestamp; do
+        # Skip comments and empty lines
         if [[ "$migration" =~ ^#.*$ ]] || [ -z "$migration" ]; then
             continue
         fi
@@ -211,6 +233,7 @@ cmd_apply() {
     fi
 }
 
+# Command: Mark migration as applied
 cmd_mark_applied() {
     local instance_name=$1
     local migration_file=$2
@@ -226,6 +249,7 @@ cmd_mark_applied() {
     print_success "Migration marked as applied: $migration_file"
 }
 
+# Command: Reset migration status
 cmd_reset() {
     local instance_name=$1
     local status_file=$(get_migration_status_file "$instance_name")
@@ -244,9 +268,11 @@ cmd_reset() {
         return 1
     fi
 
+    # Reset all statuses to pending
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
     while IFS=':' read -r migration status old_timestamp; do
+        # Skip comments and empty lines
         if [[ "$migration" =~ ^#.*$ ]] || [ -z "$migration" ]; then
             continue
         fi
@@ -257,6 +283,7 @@ cmd_reset() {
     print_success "All migration statuses reset to pending"
 }
 
+# Command: List migrations
 cmd_list() {
     local instance_name=$1
     local instance_dir="$INSTANCES_DIR/$instance_name"
@@ -285,6 +312,7 @@ cmd_list() {
     echo
 }
 
+# Parse command line arguments
 if [ $# -lt 2 ]; then
     print_error "Instance name and command are required"
     show_usage
@@ -295,11 +323,13 @@ INSTANCE_NAME="$1"
 COMMAND="$2"
 shift 2
 
+# Validate instance
 if [ ! -d "$INSTANCES_DIR/$INSTANCE_NAME" ]; then
     print_error "Instance '$INSTANCE_NAME' does not exist"
     exit 1
 fi
 
+# Execute command
 case $COMMAND in
     status)
         cmd_status "$INSTANCE_NAME"
